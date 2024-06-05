@@ -22,13 +22,30 @@ function App() {
 
   console.log(todos);
 
+  const toggleCompleted = (todoId) => {
+    const updateTodos = todos.map((todo) => {
+      if (todo.id === todoId) {
+        return {
+          ...todo,
+          completed: !todo.completed,
+        };
+      }
+      return todo;
+    })
+
+    setTodos(updateTodos);
+
+    console.log("toggleCompleted function is called");
+    console.log(todoId);
+  };
+
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>My Todo List</h1>
       {/* {todos.map((todo) => {
         return <p key={todo.id}>{todo.title}</p>;
       })} */}
-      <Todos todos={todos} />
+      <Todos todos={todos} toggleCompleted={toggleCompleted} />
     </div>
   );
 }
@@ -36,27 +53,10 @@ function App() {
 const styles = {
   container: {
     textAlign: "center",
-    backgroundColor: "#C5DEED",
-    border: "2px solid #f4f4f4",
-    margin: "0 auto",
-    maxWidth: "1100px",
-    marginTop: "30px",
-    borderRadius: "8px",
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
     padding: "12px",
   },
   title: {
     fontSize: "36px",
-    fontWeight: "bold",
-    marginBottom: "12px",
-    textTransform: "uppercase",
-    letterSpacing: "3px",
-    textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)",
-    transition: "all 0.3s ease-in",
-
-    "&:hover": {
-      textShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
-  },
   },
 };
 
