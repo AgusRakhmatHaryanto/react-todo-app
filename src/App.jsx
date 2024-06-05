@@ -1,6 +1,8 @@
-
-import React, { useState } from "react";
+import React, { useState, createContext } from "react";
 import Todos from "./components/Todos";
+import TodoForm from "./components/TodoForm";
+
+export const TodoContext = createContext();
 
 function App() {
   const [todos, setTodos] = useState([
@@ -21,23 +23,15 @@ function App() {
     },
   ]);
 
-  console.log(todos);
-
   const toggleCompleted = (todoId) => {
     const updateTodos = todos.map((todo) => {
       if (todo.id === todoId) {
-        return {
-          ...todo,
-          completed: !todo.completed,
-        };
+        return { ...todo, completed: !todo.completed };
       }
       return todo;
-    })
+    });
 
     setTodos(updateTodos);
-
-    console.log("toggleCompleted function is called");
-    console.log(todoId);
   };
 
   const deleteTodo = (todoId) => {
@@ -45,28 +39,43 @@ function App() {
     setTodos(updateTodos);
   };
 
+  const addTodo = (todoTitle) => {
+    if (todoTitle === "") return;
+
+    const newTodo = {
+      id: todos.length + 1,
+      title: todoTitle,
+      completed: false,
+    };
+
+    setTodos([...todos, newTodo]);
+  };
+
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>My Todo List</h1>
-      {/* {todos.map((todo) => {
-        return <p key={todo.id}>{todo.title}</p>;
-      })} */}
-      <Todos
-      todos={todos}
-      toggleCompleted={toggleCompleted}
-      deleteTodo={deleteTodo}
-      />
-    </div>
+    <TodoContext.Provider value={{ toggleCompleted, deleteTodo, addTodo }}>
+      <div style={styles.container}>
+        <h1 style={styles.title}>My Todo List</h1>
+        <TodoForm />
+        <Todos todos={todos} />
+      </div>
+    </TodoContext.Provider>
   );
 }
 
 const styles = {
   container: {
     textAlign: "center",
-    padding: "12px",
+    padding: "20px",
+    backgroundColor: "#f8f9fa",
+    minHeight: "100vh",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   title: {
     fontSize: "36px",
+    marginBottom: "20px",
+    color: "#333",
   },
 };
 

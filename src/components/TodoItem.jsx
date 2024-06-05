@@ -1,32 +1,26 @@
-import React from "react";
+import React, { useContext } from "react";
+import { TodoContext } from "../App";
 
-const TodoItem = ({ todo, toggleCompleted, deleteTodo }) => {
-  // Definisikan function getTodoTitleStyle di sini
+const TodoItem = ({ todo }) => {
+  const { toggleCompleted, deleteTodo } = useContext(TodoContext);
+
   const getTodoTitleStyle = () => {
-    if (todo.completed === true) {
-      return {
-        textDecoration: "line-through",
-        color: "red",
-        textDecorationColor: "red",
-      };
-    } else {
-      return { textDecoration: "none" };
-    }
+    return {
+      textDecoration: todo.completed ? "line-through" : "none",
+      color: todo.completed ? "gray" : "#333",
+      transition: "color 0.3s ease",
+    };
   };
 
-  // const toggleCompleted = () => {
-  //   console.log("toggleCompleted function is called");
-  // };
-
   return (
-    <div style={styles.todoItem}>
+    <div style={getTodoItemStyle(todo.completed)}>
       <input
         type="checkbox"
         style={styles.checkbox}
+        checked={todo.completed}
         onChange={() => toggleCompleted(todo.id)}
       />
       <p style={getTodoTitleStyle()}>{todo.title}</p>
-      {/* Tambahkan sebuah button di sini */}
       <button style={styles.button} onClick={() => deleteTodo(todo.id)}>
         x
       </button>
@@ -34,7 +28,12 @@ const TodoItem = ({ todo, toggleCompleted, deleteTodo }) => {
   );
 };
 
-// Salin CSS yang terbaru CSS di bawah ini
+const getTodoItemStyle = (completed) => ({
+  ...styles.todoItem,
+  backgroundColor: completed ? "#f0f0f0" : "#fff",
+  boxShadow: completed ? "none" : "0 4px 6px rgba(0, 0, 0, 0.1)",
+});
+
 const styles = {
   todoItem: {
     border: "2px solid #f4f4f4",
@@ -42,11 +41,15 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "0 20px",
+    padding: "10px 20px",
+    marginBottom: "10px",
+    borderRadius: "8px",
+    transition: "background-color 0.3s ease, box-shadow 0.3s ease",
   },
   checkbox: {
     height: "18px",
     width: "18px",
+    cursor: "pointer",
   },
   button: {
     backgroundColor: "#BB0000",
@@ -57,6 +60,10 @@ const styles = {
     border: "none",
     cursor: "pointer",
     fontSize: "16px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    transition: "background-color 0.3s ease",
   },
 };
 
