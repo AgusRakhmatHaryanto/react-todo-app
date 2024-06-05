@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import Todos from "./components/Todos";
 
@@ -39,13 +40,22 @@ function App() {
     console.log(todoId);
   };
 
+  const deleteTodo = (todoId) => {
+    const updateTodos = todos.filter((todo) => todo.id !== todoId);
+    setTodos(updateTodos);
+  };
+
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>My Todo List</h1>
       {/* {todos.map((todo) => {
         return <p key={todo.id}>{todo.title}</p>;
       })} */}
-      <Todos todos={todos} toggleCompleted={toggleCompleted} />
+      <Todos
+      todos={todos}
+      toggleCompleted={toggleCompleted}
+      deleteTodo={deleteTodo}
+      />
     </div>
   );
 }
